@@ -7,10 +7,15 @@
   "author": "vlad909 <vladislav.g@cronix.ms>",
   "private": true,
   "scripts": {
-    "test": "echo \"No test specified\" && exit 0"
+    "test": "echo \"No test specified\" && exit 0",
+    "dev": "quasar dev",
+    "build-android": "quasar dev -m cordova -T android",
+    "build-ios": "quasar dev -m cordova -T ios"
   },
   "dependencies": {
-    "fabric": "^2.4.5"
+    "fabric": "^2.4.5",
+    "bootstrap": "^4.1.3",
+    "brain.js": "0.7.0"
   },
   "devDependencies": {
     "quasar-cli": "^0.17.0",
