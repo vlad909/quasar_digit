@@ -1,17 +1,29 @@
 <template>
-    <div>
+    <div class="flex-container">
         <canvas id="sheet"
                 width="280px" height="280px" ref="saveCanvas"></canvas>
         <canvas width="280px" height="280px" ref="hiddenCanvas" id="hidden" class="d-none"></canvas>
-        <canvas width="28px" height="28px" ref="smallCanvas" id="small"></canvas>
-        <div class="d-flex flex-column">
-            <p v-for="(r, index) in result" v-if="result.length" :key="index">{{r}}</p>
+
+        <div class="flex-block">
+            <canvas width="28px" height="28px" ref="smallCanvas" id="small"></canvas>
+            <span class="style-result">{{max_element}}</span>
         </div>
-        <h3>max element: {{max_element}}</h3>
-        <button type="button" class="btn btn-danger" @click="knowingImageFromCanvas">wat?</button>
-        <button type="button" class="btn btn-danger" @click="clearCanvas">clear</button>
+
+        <div class="flex-block">
+            <button type="button" class="btn btn-45 btn-success" @click="knowingImageFromCanvas">wat?</button>
+            <button type="button" class="btn btn-45 btn-warning" @click="clearCanvas">clear</button>
+        </div>
+
+        <div class="flex-container">
+            <div v-for="(r, index) in result" v-if="result.length" :key="index" class="flex-block probability-block style-result"
+                 v-bind:style="{ background: `linear-gradient(to right, #28a745 ${r}%, transparent ${1 - r}%)` }">
+                <span>{{index}}</span>
+                <span>{{r}}%</span>
+            </div>
+        </div>
     </div>
 </template>
+
 <script>
     import 'fabric'
     import brain from 'brain.js'
@@ -173,6 +185,7 @@
                 thumbnailCtx.putImageData(thumbnail, 0, 0); //отрисовка 28*28 канвы
                 this.result = this.n.run(nnInput2)
                 this.max_element = this.result.findIndex(_ => _ === Math.max(...this.result))
+                this.result = this.result.map((value) => (value * 100).toFixed(4))
             }
         },
         mounted() {
@@ -184,7 +197,10 @@
         }
     }
 </script>
+
 <style>
+    @import "~bootstrap/dist/css/bootstrap.min.css";
+
     #sheet {
         border: 1px black solid !important;
     }
