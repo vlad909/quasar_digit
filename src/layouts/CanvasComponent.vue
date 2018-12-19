@@ -2,10 +2,14 @@
     <div>
         <canvas id="sheet"
                 width="280px" height="280px" ref="saveCanvas"></canvas>
-        <canvas width="280px" height="280px" ref="hiddenCanvas" id="hidden"></canvas>
+        <canvas width="280px" height="280px" ref="hiddenCanvas" id="hidden" class="d-none"></canvas>
         <canvas width="28px" height="28px" ref="smallCanvas" id="small"></canvas>
-        <p>buffer: {{buffer}}</p>
+        <div class="d-flex flex-column">
+            <p v-for="(r, index) in result" v-if="result.length" :key="index">{{r}}</p>
+        </div>
+        <h3>max element: {{max_element}}</h3>
         <button type="button" class="btn btn-danger" @click="knowingImageFromCanvas">wat?</button>
+        <button type="button" class="btn btn-danger" @click="clearCanvas">clear</button>
     </div>
 </template>
 <script>
@@ -18,10 +22,15 @@
             return {
                 canvas: {},
                 n: new brain.NeuralNetwork(),
-                buffer: ''
+                buffer: '',
+                result: [],
+                max_element: 'almost_empty'
             }
         },
         methods: {
+            clearCanvas() {
+                this.canvas.clear()
+            },
             getBoundingRectangle(img, threshold) {
                 let rows = img.length;
                 let columns = img[0].length;
@@ -162,8 +171,8 @@
                 thumbnail = resultBy28Byte.thumbnail
                 let nnInput2 = resultBy28Byte.nnInput2 //получение побитвого массива 28*28
                 thumbnailCtx.putImageData(thumbnail, 0, 0); //отрисовка 28*28 канвы
-                console.log(this.n.run(nnInput2))
-                // this.buffer = context
+                this.result = this.n.run(nnInput2)
+                this.max_element = this.result.findIndex(_ => _ === Math.max(...this.result))
             }
         },
         mounted() {
